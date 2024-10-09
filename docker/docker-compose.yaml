@@ -1,0 +1,85 @@
+version: "3.9"
+
+################################################################################
+
+networks:
+  internal:
+    name: quantumion_internal
+
+################################################################################
+
+services:
+  redis:
+    image: redis
+    container_name: quantumion_redis
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a $${REDIS_PASSWORD} --raw incr _docker_healthcheck"]
+      start_period: 10s
+      interval: 5s
+      timeout: 25s
+      retries: 5
+    environment:
+      REDIS_PASSWORD: password # Replace
+    command: ["sh", "-c", "redis-server --requirepass $${REDIS_PASSWORD} --save 20 1 --loglevel notice --appendonly yes --appendfsync everysec"]
+    expose:
+      - "6379"
+    networks:
+      internal:
+    volumes:
+      - redis_volume:/data
+
+  postgres:
+    image: postgres
+    container_name: quantumion_postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password # Replace
+      POSTGRES_USER: postgres_admin
+      POSTGRES_DB: db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d db -U postgres_admin"]
+      start_period: 10s
+      interval: 5s
+      timeout: 25s
+      retries: 5
+    expose:
+      - "5432"
+    networks:
+      internal:
+    volumes:
+      - postgres_volume:/var/lib/postgres/data 
+
+  app:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    image: quantumion
+    container_name: quantumion
+    restart: always
+    environment:
+      REDIS_HOST: redis
+      REDIS_PASSWORD: password # Replace
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: postgres_admin
+      POSTGRES_DB: db
+      POSTGRES_PASSWORD: password # Replace
+      JWT_SECRET_KEY: secret # Replace
+      JWT_ALGORITHM: HS256
+      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      RQ_WORKERS: 4
+    ports:
+      - "8000:8000"
+    networks:
+      internal:
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+
+volumes:
+  redis_volume:
+    driver: local
+  postgres_volume:
+    driver: local
