@@ -4,14 +4,14 @@ version: "3.9"
 
 networks:
   internal:
-    name: quantumion_internal
+    name: oqd-cloud-server-internal
 
 ################################################################################
 
 services:
   redis:
     image: redis
-    container_name: quantumion_redis
+    container_name: oqd-cloud-server-redis
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "redis-cli -a $${REDIS_PASSWORD} --raw incr _docker_healthcheck"]
@@ -31,7 +31,7 @@ services:
 
   postgres:
     image: postgres
-    container_name: quantumion_postgres
+    container_name: oqd-cloud-server-postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: password # Replace
@@ -52,11 +52,12 @@ services:
 
   app:
     build:
-#      context: ../
-#      dockerfile: docker/Dockerfile
-      dockerfile: Dockerfile
-    image: quantumion
-    container_name: quantumion
+      context: ../
+      dockerfile: docker/Dockerfile
+      args:
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
+    image: oqd-cloud-server
+    container_name: oqd-cloud-server
     restart: always
     environment:
       REDIS_HOST: redis

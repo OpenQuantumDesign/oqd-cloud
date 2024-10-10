@@ -11,7 +11,7 @@ from contextlib import asynccontextmanager
 
 ########################################################################################
 
-from quantumion.server.database import get_db, JobInDB
+from server.database import get_db, JobInDB
 
 ########################################################################################
 

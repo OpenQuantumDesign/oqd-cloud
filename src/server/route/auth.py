@@ -15,9 +15,9 @@ from sqlalchemy import select
 
 ########################################################################################
 
-from quantumion.server.model import Token, User
+from server.model import Token, User
 
-from quantumion.server.database import UserInDB, db_dependency
+from server.database import UserInDB, db_dependency
 
 ########################################################################################
 

@@ -10,20 +10,21 @@ from sqlalchemy import select
 
 ########################################################################################
 
-from quantumion.backend.analog.python.qutip import QutipBackend
-from quantumion.backend.digital.python.tc import TensorCircuitBackend
-from quantumion.backend.task import Task
+from analog_sim.base import QutipBackend
 
-from quantumion.server.route.auth import user_dependency
-from quantumion.server.database import db_dependency, JobInDB
-from quantumion.server.jobqueue import (
+# from midstack.backend.digital.python.tc import TensorCircuitBackend
+from midstack.backend.task import Task
+
+from server.route.auth import user_dependency
+from server.database import db_dependency, JobInDB
+from server.jobqueue import (
     redis_client,
     queue,
     report_success,
     report_failure,
     report_stopped,
 )
-from quantumion.server.model import Job
+from server.model import Job
 
 ########################################################################################
 

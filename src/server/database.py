@@ -12,6 +12,10 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 ########################################################################################
 
 POSTGRES_HOST = os.environ["POSTGRES_HOST"]

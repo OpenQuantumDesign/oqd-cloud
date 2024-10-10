@@ -4,8 +4,8 @@ from contextlib import asynccontextmanager
 
 ########################################################################################
 
-from quantumion.server.database import engine, Base
-from quantumion.server.route import user_router, auth_router, job_router
+from server.database import engine, Base
+from server.route import user_router, auth_router, job_router
 
 ########################################################################################
 

@@ -1,6 +1,10 @@
 FROM python:3.10.13-slim-bookworm as build
 
-RUN apt update && apt install -y --no-install-recommends build-essential gcc 
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends build-essential gcc && \
+    apt-get install -y git  # for installing directly from git
 
 ARG PIP_DISABLE_PIP_VERSION_CHECK=1
 ARG PIP_NO_CACHE_DIR=1
@@ -11,8 +15,14 @@ RUN python -m venv /python/venv
 
 ENV PATH="/python/venv/bin:$PATH"
 
-COPY requirements.txt .
+COPY docker/requirements.txt .
 RUN pip install -r requirements.txt
+
+# todo: remove github token once repos are public
+ARG GITHUB_TOKEN
+RUN pip install git+https://${GITHUB_TOKEN}@github.com/OpenQuantumDesign/compiler_infrastructure.git
+RUN pip install git+https://${GITHUB_TOKEN}@github.com/OpenQuantumDesign/midstack.git
+RUN pip install git+https://${GITHUB_TOKEN}@github.com/OpenQuantumDesign/analog-simulator.git
 
 ########################################################################################
 
@@ -31,10 +41,11 @@ ENV PYTHONPATH="/app"
 WORKDIR $PYTHONPATH
 
 COPY . .
-RUN pip install .[all]
+RUN pip install .
+#RUN pip install .[all]
 
-COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-#COPY ./docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+#COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
 ########################################################################################

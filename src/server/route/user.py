@@ -7,11 +7,11 @@ from sqlalchemy import select
 
 ########################################################################################
 
-from quantumion.server.route.auth import user_dependency, pwd_context
+from server.route.auth import user_dependency, pwd_context
+from server.model import UserRegistrationForm #, Job
+from server.database import UserInDB, JobInDB, db_dependency
 
-from quantumion.server.model import UserRegistrationForm, Job
-
-from quantumion.server.database import UserInDB, JobInDB, db_dependency
+from server.model import Job  # todo: proper import
 
 ########################################################################################
 
