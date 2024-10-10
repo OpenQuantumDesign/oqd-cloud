@@ -52,8 +52,9 @@ services:
 
   app:
     build:
-      context: ../
-      dockerfile: docker/Dockerfile
+#      context: ../
+#      dockerfile: docker/Dockerfile
+      dockerfile: Dockerfile
     image: quantumion
     container_name: quantumion
     restart: always
