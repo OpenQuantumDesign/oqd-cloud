@@ -12,7 +12,7 @@ class Provider:
         if hasattr(self, "_available_backends"):
             return self._available_backends
         else:
-            return ["qutip", "tensorcircuit"]
+            return ["qutip",]
 
     @property
     def registration_url(self):

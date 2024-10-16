@@ -2,7 +2,7 @@ from typing import Literal, Optional
 from pydantic import BaseModel, ConfigDict
 import requests
 
-from midstack.backend.provider import Provider
+from provider import Provider
 from midstack.backend.task import Task
 
 
@@ -72,11 +72,15 @@ class Client:
             )
         )
 
-    def connect(self, provider: Provider):
+    def connect(self,
+        provider: Provider,
+        username: str,
+        password: str
+    ):
         self._provider = provider
 
-        username = input("Enter username: ")
-        password = input("Enter password: ")
+        # username = input("Enter username: ")
+        # password = input("Enter password: ")
         login = dict(username=username, password=password)
 
         response = requests.post(
@@ -91,24 +95,25 @@ class Client:
 
         raise response.raise_for_status()
 
-    def reconnect(self):
-        self.connect(self, self.provider)
-        pass
+    # def reconnect(self):
+    #     self.connect(self, self.provider)
+    #     pass
 
-    def submit_job(self, task: Task, backend: Literal["qutip", "tensorcircuit"]):
-
+    def submit_job(self, task: Task, backend: Literal["qutip", "trical"]):
+        print(task.model_dump_json(), backend)
         response = requests.post(
             self.provider.job_submission_url(backend=backend),
             json=task.model_dump(),
             headers=self.authorization_header,
         )
-        job = Job.model_validate(response.json())
-
-        if response.status_code == 200:
-            self._jobs[job.job_id] = job
-            return self.jobs[job.job_id]
-
-        raise response.raise_for_status()
+        print(response.content)
+        # job = Job.model_validate(response.json())
+        #
+        # if response.status_code == 200:
+        #     self._jobs[job.job_id] = job
+        #     return self.jobs[job.job_id]
+        #
+        # raise response.raise_for_status()
 
     def retrieve_job(self, job_id):
         response = requests.get(

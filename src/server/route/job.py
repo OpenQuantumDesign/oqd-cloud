@@ -12,7 +12,6 @@ from sqlalchemy import select
 
 from analog_sim.base import QutipBackend
 
-# from midstack.backend.digital.python.tc import TensorCircuitBackend
 from midstack.backend.task import Task
 
 from server.route.auth import user_dependency
@@ -38,9 +37,13 @@ async def submit_job(
     user: user_dependency,
     db: db_dependency,
 ):
+    print(task)
     print(f"Queueing {task} on server {backend} backend. {len(queue)} jobs in queue.")
 
-    backends = {"qutip": QutipBackend(), "tensorcircuit": TensorCircuitBackend()}
+    backends = {
+        "qutip": QutipBackend(),
+        # "tensorcircuit": TensorCircuitBackend()
+    }
     job = queue.enqueue(
         backends[backend].run,
         task,
