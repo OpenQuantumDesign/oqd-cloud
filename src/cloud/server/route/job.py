@@ -10,20 +10,21 @@ from sqlalchemy import select
 
 ########################################################################################
 
-from analog_sim.base import QutipBackend
+from analog_emulator.qutip_backend import QutipBackend
 
-from midstack.backend.task import Task
+from core.interface.analog import *
+from core.backend.task import Task
 
-from server.route.auth import user_dependency
-from server.database import db_dependency, JobInDB
-from server.jobqueue import (
+from cloud.server.route.auth import user_dependency
+from cloud.server.database import db_dependency, JobInDB
+from cloud.server.jobqueue import (
     redis_client,
     queue,
     report_success,
     report_failure,
     report_stopped,
 )
-from server.model import Job
+from cloud.server.model import Job
 
 ########################################################################################
 

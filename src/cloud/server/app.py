@@ -1,11 +1,10 @@
 from fastapi import FastAPI
-
 from contextlib import asynccontextmanager
 
 ########################################################################################
 
-from server.database import engine, Base
-from server.route import user_router, auth_router, job_router
+from cloud.server.database import engine, Base
+from cloud.server.route import user_router, auth_router, job_router
 
 ########################################################################################
 

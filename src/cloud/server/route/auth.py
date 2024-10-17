@@ -1,7 +1,5 @@
 import os
-
 from datetime import datetime, timedelta
-
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -15,9 +13,8 @@ from sqlalchemy import select
 
 ########################################################################################
 
-from server.model import Token, User
-
-from server.database import UserInDB, db_dependency
+from cloud.server.model import Token, User
+from cloud.server.database import UserInDB, db_dependency
 
 ########################################################################################
 

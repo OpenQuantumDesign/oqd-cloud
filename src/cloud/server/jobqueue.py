@@ -11,7 +11,7 @@ from contextlib import asynccontextmanager
 
 ########################################################################################
 
-from server.database import get_db, JobInDB
+from cloud.server.database import get_db, JobInDB
 
 ########################################################################################
 

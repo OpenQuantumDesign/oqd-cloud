@@ -21,8 +21,8 @@ RUN pip install -r requirements.txt
 # todo: remove github token once repos are public
 ARG GITHUB_TOKEN
 RUN pip install git+https://${GITHUB_TOKEN}@github.com/OpenQuantumDesign/compiler_infrastructure.git
-RUN pip install git+https://${GITHUB_TOKEN}@github.com/OpenQuantumDesign/midstack.git
-RUN pip install git+https://${GITHUB_TOKEN}@github.com/OpenQuantumDesign/analog-simulator.git
+RUN pip install git+https://${GITHUB_TOKEN}@github.com/OpenQuantumDesign/oqd-core.git
+RUN pip install git+https://${GITHUB_TOKEN}@github.com/OpenQuantumDesign/oqd-analog-emulator.git
 
 ########################################################################################
 
@@ -36,11 +36,10 @@ ARG PIP_NO_CACHE_DIR=1
 COPY --from=build /python/venv /python/venv
 
 ENV PATH="/python/venv/bin:$PATH"
-ENV PYTHONPATH="/app"
+ENV PYTHONPATH="/app/src"
 
-WORKDIR $PYTHONPATH
-
-COPY . .
+COPY . ./app
+WORKDIR /app
 RUN pip install .
 #RUN pip install .[all]
 

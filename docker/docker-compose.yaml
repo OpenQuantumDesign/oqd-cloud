@@ -60,15 +60,15 @@ services:
     container_name: oqd-cloud-server
     restart: always
     environment:
-      REDIS_HOST: redis
-      REDIS_PASSWORD: password # Replace
-      POSTGRES_HOST: postgres
-      POSTGRES_USER: postgres_admin
-      POSTGRES_DB: db
-      POSTGRES_PASSWORD: password # Replace
-      JWT_SECRET_KEY: secret # Replace
-      JWT_ALGORITHM: HS256
-      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      JWT_ALGORITHM: ${JWT_ALGORITHM}
+      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: ${JWT_ACCESS_TOKEN_EXPIRE_MINUTES}
       RQ_WORKERS: 4
     ports:
       - "8000:8000"
