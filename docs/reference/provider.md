@@ -1,1 +1,1 @@
-::: src.provider
+::: cloud.provider

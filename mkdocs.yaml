@@ -1,4 +1,4 @@
-site_name: OQD - Cloud
+site_name: "Open Quantum Design - Cloud"
 
 repo_name: OpenQuantumDesign/oqd-cloud
 repo_url: https://github.com/OpenQuantumDesign/oqd-cloud
@@ -23,6 +23,7 @@ nav:
   - API Reference:
       - Client: reference/client.md
       - Provider: reference/provider.md
+      - Server: reference/server.md
 
 theme:
   name: material
@@ -65,6 +66,8 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
+          paths:
+            - ./src
           options:
             show_source: true
             show_root_heading: true
@@ -82,10 +85,6 @@ plugins:
           import:
             - https://docs.python.org/3/objects.inv
             - https://docs.pydantic.dev/latest/objects.inv
-            - https://qutip.readthedocs.io/en/qutip-4.7.x/objects.inv
-            - https://pandas.pydata.org/docs/objects.inv
-            - https://matplotlib.org/stable/objects.inv
-            - https://numpy.org/doc/stable/objects.inv
   - mkdocs-jupyter:
       ignore_h1_titles: True
 
