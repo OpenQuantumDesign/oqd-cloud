@@ -114,20 +114,18 @@ class Client:
     #     pass
 
     def submit_job(self, task: Task, backend: Literal["analog-qutip",]):
-        print(task.model_dump_json(), backend)
         response = requests.post(
             self.provider.job_submission_url(backend=backend),
             json=task.model_dump(),
             headers=self.authorization_header,
         )
-        print(response.content)
-        # job = Job.model_validate(response.json())
-        #
-        # if response.status_code == 200:
-        #     self._jobs[job.job_id] = job
-        #     return self.jobs[job.job_id]
-        #
-        # raise response.raise_for_status()
+        job = Job.model_validate(response.json())
+
+        if response.status_code == 200:
+            self._jobs[job.job_id] = job
+            return self.jobs[job.job_id]
+
+        raise response.raise_for_status()
 
     def retrieve_job(self, job_id):
         response = requests.get(
