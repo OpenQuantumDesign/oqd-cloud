@@ -30,23 +30,33 @@ from cloud.server.model import Job
 
 job_router = APIRouter(tags=["Job"])
 
+backends = {
+    "analog-qutip": QutipBackend(),
+    # "tensorcircuit": TensorCircuitBackend()
+}
+queue_functions = {
+    "analog-qutip": lambda task: backends["analog-qutip"].run(task=task)
+}
+
 
 @job_router.post("/submit/{backend}", tags=["Job"])
 async def submit_job(
     task: Task,
-    backend: Literal["qutip", "tensorcircuit"],
+    backend: Literal["analog-qutip",],
     user: user_dependency,
     db: db_dependency,
 ):
     print(task)
     print(f"Queueing {task} on server {backend} backend. {len(queue)} jobs in queue.")
 
-    backends = {
-        "qutip": QutipBackend(),
-        # "tensorcircuit": TensorCircuitBackend()
-    }
+    if backend == "analog-qutip":
+        try:
+            expt, args = backends[backend].compile(task=task)
+        except Exception as e:
+            raise Exception("Cannot properly compile to the QutipBackend.")
+        
     job = queue.enqueue(
-        backends[backend].run,
+        queue_functions[backend].run,
         task,
         on_success=Callback(report_success),
         on_failure=Callback(report_failure),

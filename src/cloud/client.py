@@ -113,7 +113,7 @@ class Client:
     #     self.connect(self, self.provider)
     #     pass
 
-    def submit_job(self, task: Task, backend: Literal["qutip", "trical"]):
+    def submit_job(self, task: Task, backend: Literal["analog-qutip",]):
         print(task.model_dump_json(), backend)
         response = requests.post(
             self.provider.job_submission_url(backend=backend),

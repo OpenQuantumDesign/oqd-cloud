@@ -24,11 +24,15 @@ RUN pip install git+https://${GITHUB_TOKEN}@github.com/OpenQuantumDesign/compile
 RUN pip install git+https://${GITHUB_TOKEN}@github.com/OpenQuantumDesign/oqd-core.git
 RUN pip install git+https://${GITHUB_TOKEN}@github.com/OpenQuantumDesign/oqd-analog-emulator.git
 
+
 ########################################################################################
 
 FROM python:3.10.13-slim-bookworm as app
 
-RUN apt update && apt install -y --no-install-recommends supervisor
+RUN apt update && \
+    apt install -y --no-install-recommends supervisor && \
+    apt-get install -y gcc g++  # needed from Cython
+
 
 ARG PIP_DISABLE_PIP_VERSION_CHECK=1
 ARG PIP_NO_CACHE_DIR=1
