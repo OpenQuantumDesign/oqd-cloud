@@ -38,6 +38,9 @@ __all__ = ["Job", "Client"]
 
 
 class Job(BaseModel):
+    """
+    Job model which is stored in the SQL database
+    """
     model_config = ConfigDict(from_attributes=True)
 
     job_id: str
@@ -49,6 +52,23 @@ class Job(BaseModel):
 
 
 class Client:
+    """
+    Client interface for submitting, requesting, and monitoring jobs running on the server.
+
+    Examples:
+        ```
+        provider = Provider(url="http://localhost:8000")
+        client = Client()
+        client.connect(
+            provider=provider,
+            user="user",
+            password="password"
+        )
+        job = client.submit_job(task=task, backend="analog-qutip")
+
+        ```
+    """
+
     def __init__(self):
         self._jobs = {}
 
@@ -98,6 +118,7 @@ class Client:
         )
 
     def connect(self, provider: Provider, username: str, password: str):
+        """ Connect to a provider URL with `username` and `password` """
         self._provider = provider
 
         # username = input("Enter username: ")
@@ -121,6 +142,7 @@ class Client:
     #     pass
 
     def submit_job(self, task: Task, backend: Literal["analog-qutip",]):
+        """ Submit a Task as an AnalogCircuit, DigitalCircuit, or AtomicCircuit to a backend. """
         response = requests.post(
             self.provider.job_submission_url(backend=backend),
             json=task.model_dump(),
@@ -135,6 +157,8 @@ class Client:
         raise response.raise_for_status()
 
     def retrieve_job(self, job_id):
+        """ Retrieve the results object of a finished job. """
+
         response = requests.get(
             self.provider.job_retrieval_url(job_id=job_id),
             headers=self.authorization_header,
@@ -148,17 +172,23 @@ class Client:
         raise response.raise_for_status()
 
     def status_update(self):
+        """ Request status update for all jobs. """
+
         for job_id in self.jobs.keys():
             self.retrieve_job(job_id)
         pass
 
     def resubmit_job(self, job_id):
+        """ Resubmit failed job. """
+
         return self.submit_job(
             task=Task.model_validate_json(self.jobs[job_id].task),
             backend=self.jobs[job_id].backend,
         )
 
     def cancel_job(self, job_id):
+        """ Cancel a job. """
+
         response = requests.delete(
             self.provider.job_cancellation_url(job_id=job_id),
             headers=self.authorization_header,

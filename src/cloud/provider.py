@@ -33,6 +33,11 @@ import requests
 
 class Provider:
     def __init__(self, url: str = "http://localhost:8000"):
+        """
+
+        Args:
+            url: URL for the server
+        """
         self.url = url
 
     @property
