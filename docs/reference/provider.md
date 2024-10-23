@@ -1,1 +1,1 @@
-::: cloud.provider
+::: oqd_cloud.provider

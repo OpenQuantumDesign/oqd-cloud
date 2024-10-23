@@ -27,8 +27,8 @@ from sqlalchemy import select
 
 ########################################################################################
 
-from cloud.server.model import Token, User
-from cloud.server.database import UserInDB, db_dependency
+from oqd_cloud.server.model import Token, User
+from oqd_cloud.server.database import UserInDB, db_dependency
 
 ########################################################################################
 

@@ -25,7 +25,7 @@ from contextlib import asynccontextmanager
 
 ########################################################################################
 
-from cloud.server.database import get_db, JobInDB
+from oqd_cloud.server.database import get_db, JobInDB
 
 ########################################################################################
 

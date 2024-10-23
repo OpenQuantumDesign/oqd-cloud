@@ -17,8 +17,8 @@ from contextlib import asynccontextmanager
 
 ########################################################################################
 
-from cloud.server.database import engine, Base
-from cloud.server.route import user_router, auth_router, job_router
+from oqd_cloud.server.database import engine, Base
+from oqd_cloud.server.route import user_router, auth_router, job_router
 
 ########################################################################################
 

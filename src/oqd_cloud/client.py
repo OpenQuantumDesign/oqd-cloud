@@ -30,8 +30,8 @@ from typing import Literal, Optional
 from pydantic import BaseModel, ConfigDict
 import requests
 
-from core.backend.task import Task
-from cloud.provider import Provider
+from oqd_core.backend.task import Task
+from oqd_cloud.provider import Provider
 
 
 __all__ = ["Job", "Client"]

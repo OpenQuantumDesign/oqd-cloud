@@ -1,1 +1,1 @@
-::: cloud.client
+::: oqd_cloud.client

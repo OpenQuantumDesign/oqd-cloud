@@ -24,21 +24,21 @@ from sqlalchemy import select
 
 ########################################################################################
 
-from analog_emulator.qutip_backend import QutipBackend
+from oqd_analog_emulator.qutip_backend import QutipBackend
 
-from core.interface.analog import *
-from core.backend.task import Task
+from oqd_core.interface.analog import *
+from oqd_core.backend.task import Task
 
-from cloud.server.route.auth import user_dependency
-from cloud.server.database import db_dependency, JobInDB
-from cloud.server.jobqueue import (
+from oqd_cloud.server.route.auth import user_dependency
+from oqd_cloud.server.database import db_dependency, JobInDB
+from oqd_cloud.server.jobqueue import (
     redis_client,
     queue,
     report_success,
     report_failure,
     report_stopped,
 )
-from cloud.server.model import Job
+from oqd_cloud.server.model import Job
 
 ########################################################################################
 

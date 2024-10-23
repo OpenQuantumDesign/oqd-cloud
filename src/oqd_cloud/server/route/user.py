@@ -21,11 +21,11 @@ from sqlalchemy import select
 
 ########################################################################################
 
-from cloud.server.route.auth import user_dependency, pwd_context
-from cloud.server.model import UserRegistrationForm  # , Job
-from cloud.server.database import UserInDB, JobInDB, db_dependency
+from oqd_cloud.server.route.auth import user_dependency, pwd_context
+from oqd_cloud.server.model import UserRegistrationForm  # , Job
+from oqd_cloud.server.database import UserInDB, JobInDB, db_dependency
 
-from cloud.server.model import Job  # todo: proper import
+from oqd_cloud.server.model import Job  # todo: proper import
 
 ########################################################################################
 

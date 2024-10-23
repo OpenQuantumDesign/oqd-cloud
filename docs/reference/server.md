@@ -1,1 +1,1 @@
-::: cloud.server
+::: oqd_cloud.server

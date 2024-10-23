@@ -1,18 +1,32 @@
+#  Copyright 2024 OPEN QUANTUM DESIGN
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
 #%%
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 #%%
-from core.interface.analog.operator import *
-from core.interface.analog.operation import *
-from core.backend.metric import *
-from core.backend.task import Task, TaskArgsAnalog
+from oqd_core.interface.analog.operator import *
+from oqd_core.interface.analog.operation import *
+from oqd_core.backend.metric import *
+from oqd_core.backend.task import Task, TaskArgsAnalog
 
-from analog_emulator.qutip_backend import QutipBackend
+from oqd_analog_emulator.qutip_backend import QutipBackend
 
-from cloud.client import Client
-from cloud.provider import Provider
+from oqd_cloud.client import Client
+from oqd_cloud.provider import Provider
 
 #%%
 X = PauliX()
