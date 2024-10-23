@@ -33,4 +33,4 @@ test = ["unittest_prettify"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["server*"]
+include = ["oqd_cloud*"]
