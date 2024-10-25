@@ -1,4 +1,4 @@
-#  Copyright 2024 OPEN QUANTUM DESIGN
+#  Copyright 2024 Open Quantum Design
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -70,6 +70,7 @@ args = TaskArgsAnalog(
 
 task = Task(program=circuit, args=args)
 task.model_dump_json()
+
 #%%
 backend = QutipBackend()
 expt, args = backend.compile(task=task)

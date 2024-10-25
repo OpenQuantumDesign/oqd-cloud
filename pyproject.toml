@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 
 [project]
-name = "oqd-cloud-server"
+name = "oqd-cloud"
 version = "0.0.0"
 requires-python = ">=3.10"
 
@@ -12,7 +12,12 @@ requires-python = ">=3.10"
 dependencies = [
     "pydantic>=2.4",
     "qutip~=5.0.1",
-    "asyncpg", "uvicorn", "python-jose", "passlib", "python-multipart", "python-dotenv",
+    "asyncpg",
+    "uvicorn",
+    "python-jose",
+    "passlib",
+    "python-multipart",
+    "python-dotenv",
     "Cython~=3.0.10",
     "filelock~=3.13.4",
     "numpy~=1.0",

@@ -20,7 +20,7 @@ services:
       timeout: 25s
       retries: 5
     environment:
-      REDIS_PASSWORD: password # Replace
+      REDIS_PASSWORD: ${REDIS_PASSWORD} # Replace
     command: ["sh", "-c", "redis-server --requirepass $${REDIS_PASSWORD} --save 20 1 --loglevel notice --appendonly yes --appendfsync everysec"]
     expose:
       - "6379"
@@ -34,9 +34,9 @@ services:
     container_name: oqd-cloud-server-postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: password # Replace
-      POSTGRES_USER: postgres_admin
-      POSTGRES_DB: db
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Replace
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d db -U postgres_admin"]
       start_period: 10s
