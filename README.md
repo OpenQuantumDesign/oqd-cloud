@@ -1,5 +1,7 @@
 # ![Open Quantum Design](docs/img/oqd-logo-text.png)
-![Python](https://img.shields.io/badge/Python-3.11-blue)
+
+![Python](https://img.shields.io/badge/Python-3.10_|_3.11_|_3.12-blue)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 <h2 align="center">
     Open Quantum Design: Cloud
