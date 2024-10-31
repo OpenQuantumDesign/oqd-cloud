@@ -27,17 +27,10 @@ classifiers = [
 
 
 dependencies = [
+    "requests",
     "pydantic>=2.4",
-    "qutip~=5.0.1",
-    "asyncpg",
-    "uvicorn",
-    "python-jose",
-    "passlib",
-    "python-multipart",
-    "python-dotenv",
-    "Cython~=3.0.10",
-    "filelock~=3.13.4",
     "numpy~=1.0",
+    ""
 #    "oqd_compiler_infrastructure",
 ]
 
@@ -51,6 +44,15 @@ docs = [
 
 test = ["unittest_prettify"]
 
+server = [
+    "pydantic>=2.4",
+    "qutip~=5.0.1",
+    "asyncpg",
+    "uvicorn",
+    "python-jose",
+    "passlib",
+    "python-multipart",
+]
 
 
 [tool.setuptools.packages.find]
