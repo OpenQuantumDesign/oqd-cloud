@@ -30,8 +30,6 @@ dependencies = [
     "requests",
     "pydantic>=2.4",
     "numpy~=1.0",
-    ""
-#    "oqd_compiler_infrastructure",
 ]
 
 [project.optional-dependencies]
@@ -45,6 +43,7 @@ docs = [
 test = ["unittest_prettify"]
 
 server = [
+#    "oqd-compiler-infrastructure",
     "pydantic>=2.4",
     "qutip~=5.0.1",
     "asyncpg",
