@@ -18,11 +18,9 @@ ENV PATH="/python/venv/bin:$PATH"
 COPY docker/requirements.txt .
 RUN pip install -r requirements.txt
 
-# todo: remove github token once repos are public
-ARG GITHUB_TOKEN
-RUN pip install git+https://${GITHUB_TOKEN}@github.com/OpenQuantumDesign/oqd-compiler-infrastructure.git
-RUN pip install git+https://${GITHUB_TOKEN}@github.com/OpenQuantumDesign/oqd-core.git
-RUN pip install git+https://${GITHUB_TOKEN}@github.com/OpenQuantumDesign/oqd-analog-emulator.git
+RUN pip install oqd-compiler-infrastructure
+RUN pip install oqd-core
+RUN pip install oqd-analog-emulator
 
 
 ########################################################################################
