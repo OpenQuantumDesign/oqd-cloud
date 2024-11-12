@@ -5,10 +5,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "oqd-cloud"
-version = "0.0.0"
+version = "0.1.0"
 requires-python = ">=3.10"
 readme = "README.md"
-license = { file = "LICENSE" }
+license = {text = "Apache 2.0"}
 keywords = ["quantum", "computing", "simulation", "cloud", "server"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -26,7 +26,14 @@ classifiers = [
 ]
 
 
-dependencies = ["requests", "pydantic>=2.4", "numpy~=1.0"]
+dependencies = [
+    "requests",
+    "pydantic>=2.4",
+    "numpy~=1.0",
+    "oqd-compiler-infrastructure",
+    "oqd-core",
+    "oqd-analog-emulator"
+]
 
 [project.optional-dependencies]
 docs = [
@@ -46,9 +53,10 @@ server = [
     "python-jose",
     "passlib",
     "python-multipart",
-    "oqd_compiler_infrastructure@git+https://github.com/openquantumdesign/oqd-compiler-infrastructure",
-    "oqd_core@git+https://github.com/openquantumdesign/oqd-core",
-    "oqd_analog_emulator@git+https://github.com/openquantumdesign/oqd-analog-emulator",
+    #
+    "oqd-compiler-infrastructure",
+    "oqd-core",
+    "oqd-analog-emulator",
 ]
 
 
