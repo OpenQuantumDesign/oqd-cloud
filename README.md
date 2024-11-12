@@ -1,17 +1,27 @@
-# ![Open Quantum Design](docs/img/oqd-logo-text.png)
-
-![Python](https://img.shields.io/badge/Python-3.10_|_3.11_|_3.12-blue)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+# ![Open Quantum Design](https://raw.githubusercontent.com/OpenQuantumDesign/oqd-compiler-infrastructure/main/docs/img/oqd-logo-text.png)
 
 <h2 align="center">
     Open Quantum Design: Cloud
 </h2>
+
+[![doc](https://img.shields.io/badge/documentation-lightblue)](https://docs.openquantumdesign.org/open-quantum-design-cloud)
+[![PyPI Version](https://img.shields.io/pypi/v/oqd-cloud)](https://pypi.org/project/oqd-cloud)
+[![CI](https://github.com/OpenQuantumDesign/oqd-cloud/actions/workflows/pytest.yml/badge.svg)](https://github.com/OpenQuantumDesign/oqd-cloud/actions/workflows/pytest.yml)
+![versions](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)
+[![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
+
+
 
 ## What's Here
 This repository contains the software needed to submit jobs to a remote, cloud server for classical simulations of quantum programs.
 In addition, it provides a Docker script to self-host a simulation server of the OQD emulator backends.
 
 ## Installation
+```bash 
+pip install oqd-cloud
+```
+
 To install locally for development or launching a Docker container server:
 
 ```bash
@@ -21,7 +31,8 @@ pip install .
 
 To start the simulation server, ensure Docker is installed on the machine, navigate to the `docker` folder, and run,
 ```bash
-docker compose up
+cd oqd-cloud/docker
+docker compose up -d
 ```
 
 To serve the documentation, 
