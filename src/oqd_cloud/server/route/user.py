@@ -15,7 +15,7 @@
 from fastapi import APIRouter, HTTPException
 from fastapi import status as http_status
 
-from rq.job import Job
+# from rq.job import Job
 
 from sqlalchemy import select
 

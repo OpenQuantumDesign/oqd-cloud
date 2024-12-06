@@ -26,7 +26,6 @@ from sqlalchemy import select
 
 from oqd_analog_emulator.qutip_backend import QutipBackend
 
-from oqd_core.interface.analog import *
 from oqd_core.backend.task import Task
 
 from oqd_cloud.server.route.auth import user_dependency
@@ -66,7 +65,7 @@ async def submit_job(
     if backend == "analog-qutip":
         try:
             expt, args = backends[backend].compile(task=task)
-        except Exception as e:
+        except Exception:
             raise Exception("Cannot properly compile to the QutipBackend.")
 
     job = queue.enqueue(

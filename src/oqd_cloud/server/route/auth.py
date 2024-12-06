@@ -57,7 +57,7 @@ async def current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
         username = payload.get("sub")
         user_id = payload.get("id")
-        if not username is None and not user_id is None:
+        if username is not None and user_id is not None:
             return User(username=username, user_id=user_id)
         raise JWTError
 
