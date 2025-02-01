@@ -1,4 +1,4 @@
-# Copyright 2024 Open Quantum Design
+# Copyright 2024-2025 Open Quantum Design
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,20 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import asyncio
 import os
+from contextlib import asynccontextmanager
 
 from redis import Redis
 from rq import Queue
-
 from sqlalchemy import select
 
-import asyncio
-
-from contextlib import asynccontextmanager
-
 ########################################################################################
-
-from oqd_cloud.server.database import get_db, JobInDB
+from oqd_cloud.server.database import JobInDB, get_db
 
 ########################################################################################
 

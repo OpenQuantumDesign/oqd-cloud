@@ -1,4 +1,4 @@
-# Copyright 2024 Open Quantum Design
+# Copyright 2024-2025 Open Quantum Design
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
 
 
 from typing import Literal, Optional
-from pydantic import BaseModel, ConfigDict
+
 import requests
-
 from oqd_core.backend.task import Task
-from oqd_cloud.provider import Provider
+from pydantic import BaseModel, ConfigDict
 
+from oqd_cloud.provider import Provider
 
 __all__ = ["Job", "Client"]
 

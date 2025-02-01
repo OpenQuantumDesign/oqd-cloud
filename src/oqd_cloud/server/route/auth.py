@@ -1,4 +1,4 @@
-# Copyright 2024 Open Quantum Design
+# Copyright 2024-2025 Open Quantum Design
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,17 +18,14 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-
 from jose import JWTError, jwt
-
 from passlib.context import CryptContext
-
 from sqlalchemy import select
 
-########################################################################################
-
-from oqd_cloud.server.model import Token, User
 from oqd_cloud.server.database import UserInDB, db_dependency
+
+########################################################################################
+from oqd_cloud.server.model import Token, User
 
 ########################################################################################
 
@@ -57,7 +54,7 @@ async def current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
         username = payload.get("sub")
         user_id = payload.get("id")
-        if not username is None and not user_id is None:
+        if username is not None and user_id is not None:
             return User(username=username, user_id=user_id)
         raise JWTError
 

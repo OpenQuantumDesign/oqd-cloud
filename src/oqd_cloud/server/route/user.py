@@ -1,4 +1,4 @@
-# Copyright 2024 Open Quantum Design
+# Copyright 2024-2025 Open Quantum Design
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,17 +15,17 @@
 from fastapi import APIRouter, HTTPException
 from fastapi import status as http_status
 
-from rq.job import Job
-
+# from rq.job import Job
 from sqlalchemy import select
 
+from oqd_cloud.server.database import JobInDB, UserInDB, db_dependency
+from oqd_cloud.server.model import (
+    Job,  # todo: proper import
+    UserRegistrationForm,  # , Job
+)
+
 ########################################################################################
-
-from oqd_cloud.server.route.auth import user_dependency, pwd_context
-from oqd_cloud.server.model import UserRegistrationForm  # , Job
-from oqd_cloud.server.database import UserInDB, JobInDB, db_dependency
-
-from oqd_cloud.server.model import Job  # todo: proper import
+from oqd_cloud.server.route.auth import pwd_context, user_dependency
 
 ########################################################################################
 
