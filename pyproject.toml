@@ -29,9 +29,7 @@ classifiers = [
 dependencies = [
     "requests",
     "pydantic>=2.4",
-    "oqd-compiler-infrastructure@git+https://github.com/openquantumdesign/oqd-compiler-infrastructure",
     "oqd-core@git+https://github.com/openquantumdesign/oqd-core",
-    "oqd-compiler-infrastructure@git+https://github.com/openquantumdesign/oqd-analog-emulator",
 ]
 
 [project.optional-dependencies]
@@ -45,17 +43,15 @@ docs = [
 tests = ["pytest"]
 
 server = [
-    "pydantic>=2.4",
-    "qutip~=5.0.1",
     "asyncpg",
     "uvicorn",
     "python-jose",
     "passlib",
     "python-multipart",
     #
-    "oqd-compiler-infrastructure",
-    "oqd-core",
-    "oqd-analog-emulator",
+    "oqd-compiler-infrastructure@git+https://github.com/openquantumdesign/oqd-compiler-infrastructure",
+    "oqd-core@git+https://github.com/openquantumdesign/oqd-core",
+    "oqd-compiler-infrastructure@git+https://github.com/openquantumdesign/oqd-analog-emulator",
 ]
 
 
