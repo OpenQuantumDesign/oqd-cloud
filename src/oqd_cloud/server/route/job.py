@@ -17,27 +17,23 @@ from typing import Literal
 from fastapi import APIRouter, HTTPException
 from fastapi import status as http_status
 
+########################################################################################
+from oqd_analog_emulator.qutip_backend import QutipBackend
+from oqd_core.backend.task import Task
 from rq.job import Callback
 from rq.job import Job as RQJob
-
 from sqlalchemy import select
 
-########################################################################################
-
-from oqd_analog_emulator.qutip_backend import QutipBackend
-
-from oqd_core.backend.task import Task
-
-from oqd_cloud.server.route.auth import user_dependency
-from oqd_cloud.server.database import db_dependency, JobInDB
+from oqd_cloud.server.database import JobInDB, db_dependency
 from oqd_cloud.server.jobqueue import (
-    redis_client,
     queue,
-    report_success,
+    redis_client,
     report_failure,
     report_stopped,
+    report_success,
 )
 from oqd_cloud.server.model import Job
+from oqd_cloud.server.route.auth import user_dependency
 
 ########################################################################################
 

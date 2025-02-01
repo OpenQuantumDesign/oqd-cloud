@@ -13,16 +13,15 @@
 # limitations under the License.
 
 import os
-from typing import Annotated, Optional, List
 from datetime import datetime
+from typing import Annotated, List, Optional
 from uuid import uuid4
-from fastapi import Depends
-
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 
 from dotenv import load_dotenv
+from fastapi import Depends
+from sqlalchemy import ForeignKey
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 load_dotenv()
 

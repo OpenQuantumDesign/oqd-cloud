@@ -12,20 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import asyncio
 import os
+from contextlib import asynccontextmanager
 
 from redis import Redis
 from rq import Queue
-
 from sqlalchemy import select
 
-import asyncio
-
-from contextlib import asynccontextmanager
-
 ########################################################################################
-
-from oqd_cloud.server.database import get_db, JobInDB
+from oqd_cloud.server.database import JobInDB, get_db
 
 ########################################################################################
 

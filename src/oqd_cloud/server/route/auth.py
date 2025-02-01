@@ -18,17 +18,14 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-
 from jose import JWTError, jwt
-
 from passlib.context import CryptContext
-
 from sqlalchemy import select
 
-########################################################################################
-
-from oqd_cloud.server.model import Token, User
 from oqd_cloud.server.database import UserInDB, db_dependency
+
+########################################################################################
+from oqd_cloud.server.model import Token, User
 
 ########################################################################################
 

@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-########################################################################################
+from fastapi import FastAPI
 
-from oqd_cloud.server.database import engine, Base
-from oqd_cloud.server.route import user_router, auth_router, job_router
+########################################################################################
+from oqd_cloud.server.database import Base, engine
+from oqd_cloud.server.route import auth_router, job_router, user_router
 
 ########################################################################################
 

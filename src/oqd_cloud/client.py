@@ -14,12 +14,12 @@
 
 
 from typing import Literal, Optional
-from pydantic import BaseModel, ConfigDict
+
 import requests
-
 from oqd_core.backend.task import Task
-from oqd_cloud.provider import Provider
+from pydantic import BaseModel, ConfigDict
 
+from oqd_cloud.provider import Provider
 
 __all__ = ["Job", "Client"]
 
