@@ -52,7 +52,7 @@ class Client:
             user="user",
             password="password"
         )
-        job = client.submit_job(task=task, backend="analog-qutip")
+        job = client.submit_job(task=task, backend="oqd-analog-emulator")
 
         ```
     """

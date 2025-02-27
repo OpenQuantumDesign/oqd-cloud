@@ -5,10 +5,39 @@ version: "3.9"
 networks:
   internal:
     name: oqd-cloud-server-internal
+  # minionetwork:
+    # driver: bridge
+
+
+volumes:
+  redis_volume:
+    driver: local
+  postgres_volume:
+    driver: local
+  minio_volume:
+    driver: local
+
 
 ################################################################################
 
 services:
+  minio:
+    image: docker.io/bitnami/minio:2022
+    container_name: oqd-cloud-server-minio
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    networks:
+      # - minionetwork
+      internal:
+    volumes:
+      - 'minio_volume:/data'
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${REDIS_PASSWORD}
+      - MINIO_DEFAULT_BUCKETS=${REDIS_BUCKET_NAME}
+
+
   redis:
     image: redis
     container_name: oqd-cloud-server-redis
@@ -70,6 +99,9 @@ services:
       JWT_ALGORITHM: ${JWT_ALGORITHM}
       JWT_ACCESS_TOKEN_EXPIRE_MINUTES: ${JWT_ACCESS_TOKEN_EXPIRE_MINUTES}
       RQ_WORKERS: 4
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_DEFAULT_BUCKETS: ${MINIO_DEFAULT_BUCKETS}
     ports:
       - "8000:8000"
     networks:
@@ -80,8 +112,3 @@ services:
       postgres:
         condition: service_healthy
 
-volumes:
-  redis_volume:
-    driver: local
-  postgres_volume:
-    driver: local

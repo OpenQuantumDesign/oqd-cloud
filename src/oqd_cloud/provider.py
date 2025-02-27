@@ -29,7 +29,7 @@ class Provider:
             return self._available_backends
         else:
             return [
-                "analog-qutip",
+                "oqd-analog-emulator",
             ]
 
     @property
