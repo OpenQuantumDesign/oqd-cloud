@@ -23,6 +23,8 @@ from oqd_core.backend.task import Task, TaskArgsAnalog
 from oqd_core.interface.analog.operation import AnalogCircuit, AnalogGate
 from oqd_core.interface.analog.operator import PauliX, PauliZ
 
+from oqd_core.interface.atomic.circuit import AtomicCircuit
+
 from oqd_cloud.client import Client
 from oqd_cloud.provider import Provider
 
@@ -113,7 +115,7 @@ task.model_dump_json()
 
 # %%
 client = Client()
-provider = Provider()
+provider = Provider(port=8007)
 client.connect(provider=provider, username="ben", password="pwd")
 client.status_report
 
@@ -127,3 +129,33 @@ job = client.submit_job(task=task, backend="oqd-analog-emulator-qutip")
 
 # %%
 client.retrieve_job(job_id=job.job_id)
+
+# %%
+
+with open("./tests/atomic.json", "r") as f:
+    circuit = AtomicCircuit.model_validate_json(f.read())
+
+print(circuit)
+
+# %%
+from minio import Minio
+import os
+
+os.getenv("127.0.0.1:9000")
+
+client = Minio(
+    "127.0.0.1:9000",
+    access_key="admin",
+    secret_key="password",
+    secure=False
+)
+
+# %%
+source_file = "./tests/atomic.json"
+bucket_name = "oqd-cloud-bucket"
+destination_file = "my-test-file.txt"
+
+client.fput_object(
+    bucket_name, destination_file, source_file,
+)
+# %%

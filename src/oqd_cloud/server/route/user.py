@@ -21,7 +21,7 @@ from sqlalchemy import select
 from oqd_cloud.server.database import JobInDB, UserInDB, db_dependency
 from oqd_cloud.server.model import (
     Job,  # todo: proper import
-    UserRegistrationForm,  # , Job
+    UserRegistrationForm,
 )
 
 ########################################################################################

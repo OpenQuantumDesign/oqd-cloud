@@ -30,6 +30,22 @@ dependencies = [
     "requests",
     "pydantic>=2.4",
     "oqd-core@git+https://github.com/OpenQuantumDesign/oqd-core",
+    #
+    "asyncpg",
+    "uvicorn",
+    "python-jose",
+    "passlib",
+    "python-multipart",
+    "pydantic>=2.4",
+    "sqlalchemy",
+    "fastapi",
+    "redis",
+    "rq",
+    "python-dotenv",
+    "minio",
+    #
+    "oqd-analog-emulator@git+https://github.com/OpenQuantumDesign/oqd-analog-emulator",
+    "oqd-trical@git+https://github.com/OpenQuantumDesign/oqd-trical",
 ]
 
 [project.optional-dependencies]

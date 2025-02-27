@@ -17,12 +17,13 @@ from oqd_cloud.server.model import Backends
 
 
 class Provider:
-    def __init__(self, url: str = "http://localhost:8000"):
+    def __init__(self, host: str = "http://localhost", port: int = 8000):
         """
 
         Args:
             url: URL for the server
         """
+        url = f"{host}:{port}"
         self.url = url
 
         # get available backends

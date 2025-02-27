@@ -71,7 +71,7 @@ async def submit_job(
     # }
 
     job = queue.enqueue(
-        backends[backend].run,
+        _backends[backend].run,
         task,
         on_success=Callback(report_success),
         on_failure=Callback(report_failure),
