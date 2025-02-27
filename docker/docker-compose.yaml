@@ -5,9 +5,6 @@ version: "3.9"
 networks:
   internal:
     name: oqd-cloud-server-internal
-  # minionetwork:
-    # driver: bridge
-
 
 volumes:
   redis_volume:
@@ -22,21 +19,22 @@ volumes:
 
 services:
   minio:
-    image: docker.io/bitnami/minio:2022
+    image: minio/minio
     container_name: oqd-cloud-server-minio
+    restart: always
     ports:
       - '9000:9000'
       - '9001:9001'
+    # network_mode: "host"
     networks:
-      # - minionetwork
       internal:
     volumes:
       - 'minio_volume:/data'
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
-      - MINIO_ROOT_PASSWORD=${REDIS_PASSWORD}
-      - MINIO_DEFAULT_BUCKETS=${REDIS_BUCKET_NAME}
-
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_DEFAULT_BUCKETS=${MINIO_DEFAULT_BUCKETS}
+    command: server /data --console-address ":9001"
 
   redis:
     image: redis
@@ -53,6 +51,7 @@ services:
     command: ["sh", "-c", "redis-server --requirepass $${REDIS_PASSWORD} --save 20 1 --loglevel notice --appendonly yes --appendfsync everysec"]
     expose:
       - "6379"
+    # network_mode: "host"
     networks:
       internal:
     volumes:
@@ -74,10 +73,49 @@ services:
       retries: 5
     expose:
       - "5432"
+    # network_mode: "host"
     networks:
       internal:
     volumes:
       - postgres_volume:/var/lib/postgres/data 
+
+
+  # app:
+  #   image: oqd-cloud-server  # Use existing built image
+  #   container_name: oqd-cloud-server
+  #   restart: always
+  #   environment:
+  #     REDIS_HOST: ${REDIS_HOST}
+  #     REDIS_PASSWORD: ${REDIS_PASSWORD}
+  #     POSTGRES_HOST: ${POSTGRES_HOST}
+  #     POSTGRES_USER: ${POSTGRES_USER}
+  #     POSTGRES_DB: ${POSTGRES_DB}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #     JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+  #     JWT_ALGORITHM: ${JWT_ALGORITHM}
+  #     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: ${JWT_ACCESS_TOKEN_EXPIRE_MINUTES}
+  #     RQ_WORKERS: 4
+  #     MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+  #     MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+  #     MINIO_DEFAULT_BUCKETS: ${MINIO_DEFAULT_BUCKETS}
+  #   ports:
+  #     - "8000:8000"
+  #   networks:
+  #     - internal
+  #   volumes:
+  #     - ../:/app  # Bind-mount your code
+  #   working_dir: /app  # Set working directory inside container
+  #   command: >
+  #     /bin/sh -c "
+  #     source .venv/bin/activate
+  #     uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+  #     "
+  #   depends_on:
+  #     redis:
+  #       condition: service_healthy
+  #     postgres:
+  #       condition: service_healthy
+
 
   app:
     build:

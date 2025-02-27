@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Optional
+from typing import Optional, Sequence
 
 from pydantic import BaseModel, ConfigDict
 
@@ -44,3 +44,7 @@ class Job(BaseModel):
     status: str
     result: Optional[str] = None
     user_id: str
+
+
+class Backends(BaseModel):
+    available: Sequence[str]

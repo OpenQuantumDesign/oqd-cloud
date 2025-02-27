@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import requests 
+
 
 class Provider:
     def __init__(self, url: str = "http://localhost:8000"):
@@ -25,12 +27,18 @@ class Provider:
     @property
     def available_backends(self):
         # todo: get available backends from url
-        if hasattr(self, "_available_backends"):
-            return self._available_backends
-        else:
-            return [
-                "oqd-analog-emulator",
-            ]
+        response = requests.post(
+            self.url + "/available_backends"
+        )
+        if response.status_code == 200:
+            return response['backends']
+
+        # if hasattr(self, "_available_backends"):
+        #     return self._available_backends
+        # else:
+        #     return [
+        #         "oqd-analog-emulator",
+        #     ]
 
     @property
     def registration_url(self):

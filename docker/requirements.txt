@@ -1,6 +1,0 @@
-pydantic>=2.4
-sqlalchemy
-fastapi
-redis
-rq
-python-dotenv

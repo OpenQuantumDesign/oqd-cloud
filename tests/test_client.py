@@ -14,10 +14,10 @@
 
 
 # %%
-import matplotlib.pyplot as plt
-import numpy as np
-import seaborn as sns
-from oqd_analog_emulator.qutip_backend import QutipBackend
+# import matplotlib.pyplot as plt
+# import numpy as np
+# import seaborn as sns
+# from oqd_analog_emulator.qutip_backend import QutipBackend
 from oqd_core.backend.metric import Expectation
 from oqd_core.backend.task import Task, TaskArgsAnalog
 from oqd_core.interface.analog.operation import AnalogCircuit, AnalogGate
@@ -70,46 +70,46 @@ task = Task(program=circuit, args=args)
 task.model_dump_json()
 
 # %%
-backend = QutipBackend()
-expt, args = backend.compile(task=task)
+# backend = QutipBackend()
+# expt, args = backend.compile(task=task)
 # results = backend.run(experiment=expt, args=args)
-a = {"experiment": expt, "args": args}
-results = backend.run(task=task)
+# a = {"experiment": expt, "args": args}
+# results = backend.run(task=task)
 
 # %%
-fig, ax = plt.subplots(1, 1, figsize=[6, 3])
-colors = sns.color_palette(palette="crest", n_colors=4)
+# fig, ax = plt.subplots(1, 1, figsize=[6, 3])
+# colors = sns.color_palette(palette="crest", n_colors=4)
 
-for k, (name, metric) in enumerate(results.metrics.items()):
-    ax.plot(results.times, metric, label=f"$\\langle {name} \\rangle$", color=colors[k])
-ax.legend()
-# plt.show()
+# for k, (name, metric) in enumerate(results.metrics.items()):
+#     ax.plot(results.times, metric, label=f"$\\langle {name} \\rangle$", color=colors[k])
+# ax.legend()
+# # plt.show()
 
-# %%
-fig, axs = plt.subplots(4, 1, sharex=True, figsize=[5, 9])
+# # %%
+# fig, axs = plt.subplots(4, 1, sharex=True, figsize=[5, 9])
 
-state = np.array([basis.real + 1j * basis.imag for basis in results.state])
-bases = ["0", "1"]
-counts = {basis: results.counts.get(basis, 0) for basis in bases}
+# state = np.array([basis.real + 1j * basis.imag for basis in results.state])
+# bases = ["0", "1"]
+# counts = {basis: results.counts.get(basis, 0) for basis in bases}
 
-ax = axs[0]
-ax.bar(x=bases, height=np.abs(state) ** 2, color=colors[0])
-ax.set(ylabel="Probability")
+# ax = axs[0]
+# ax.bar(x=bases, height=np.abs(state) ** 2, color=colors[0])
+# ax.set(ylabel="Probability")
 
 
-ax = axs[1]
-ax.bar(x=bases, height=list(counts.values()), color=colors[1])
-ax.set(ylabel="Count")
+# ax = axs[1]
+# ax.bar(x=bases, height=list(counts.values()), color=colors[1])
+# ax.set(ylabel="Count")
 
-ax = axs[2]
-ax.bar(x=bases, height=state.real, color=colors[2])
-ax.set(ylabel="Amplitude (real)")
+# ax = axs[2]
+# ax.bar(x=bases, height=state.real, color=colors[2])
+# ax.set(ylabel="Amplitude (real)")
 
-ax = axs[3]
-ax.bar(x=bases, height=state.imag, color=colors[3])
-ax.set(xlabel="Basis state", ylabel="Amplitude (imag)", ylim=[-np.pi, np.pi])
+# ax = axs[3]
+# ax.bar(x=bases, height=state.imag, color=colors[3])
+# ax.set(xlabel="Basis state", ylabel="Amplitude (imag)", ylim=[-np.pi, np.pi])
 
-# plt.show()
+# # plt.show()
 
 # %%
 client = Client()
@@ -117,9 +117,13 @@ provider = Provider()
 client.connect(provider=provider, username="ben", password="pwd")
 client.status_report
 
+#%%
+backends = provider.available_backends
+print(backends)
+
 # %%
 print(client.jobs)
-job = client.submit_job(task=task, backend="analog-qutip")
+job = client.submit_job(task=task, backend="oqd-analog-emulator-qutip")
 
 # %%
 client.retrieve_job(job_id=job.job_id)

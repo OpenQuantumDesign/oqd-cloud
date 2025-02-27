@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-from typing import Literal, Optional
+from typing import Literal, Optional, Sequence
 
 import requests
 from oqd_core.backend.task import Task
@@ -21,7 +21,11 @@ from pydantic import BaseModel, ConfigDict
 
 from oqd_cloud.provider import Provider
 
-__all__ = ["Job", "Client"]
+__all__ = ["Job", "Client", "Backends"]
+
+
+class Backends(BaseModel):
+    available: Sequence[str]
 
 
 class Job(BaseModel):
@@ -129,13 +133,18 @@ class Client:
     #     self.connect(self, self.provider)
     #     pass
 
-    def submit_job(self, task: Task, backend: Literal["analog-qutip",]):
+    def submit_job(
+        self, 
+        task: Task, 
+        backend: str
+    ):
         """Submit a Task as an AnalogCircuit, DigitalCircuit, or AtomicCircuit to a backend."""
         response = requests.post(
             self.provider.job_submission_url(backend=backend),
             json=task.model_dump(),
             headers=self.authorization_header,
         )
+        print(response)
         job = Job.model_validate(response.json())
 
         if response.status_code == 200:
