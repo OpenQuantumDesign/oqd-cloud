@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import requests 
+from oqd_cloud.server.model import Backends
 
 
 class Provider:
@@ -24,22 +25,19 @@ class Provider:
         """
         self.url = url
 
-    @property
-    def available_backends(self):
-        # todo: get available backends from url
+        # get available backends
+        self.backends = Backends(available=[])
         response = requests.post(
             self.url + "/available_backends"
         )
+        backends = Backends.model_validate(response.json())
         if response.status_code == 200:
-            return response['backends']
+            self.backends = backends
 
-        # if hasattr(self, "_available_backends"):
-        #     return self._available_backends
-        # else:
-        #     return [
-        #         "oqd-analog-emulator",
-        #     ]
-
+    @property
+    def available_backends(self):
+        return self.backends.available
+    
     @property
     def registration_url(self):
         return self.url + "/auth/register"
