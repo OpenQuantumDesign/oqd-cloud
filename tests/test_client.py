@@ -27,6 +27,7 @@ from oqd_core.interface.atomic.circuit import AtomicCircuit
 
 from oqd_cloud.client import Client
 from oqd_cloud.provider import Provider
+from rich.pretty import pprint 
 
 X = PauliX()
 Z = PauliZ()
@@ -78,36 +79,8 @@ print(backends)
 
 # %%
 print(client.jobs)
-job = client.submit_job(task=task, backend="oqd-analog-emulator-qutip", tags=['a', 'b'])
+job = client.submit_job(task=task, backend="oqd-analog-emulator-qutip", tags='a')
+pprint(job)
 
 # %%
 client.retrieve_job(job_id=job.job_id)
-
-# %%
-with open("./tests/atomic.json", "r") as f:
-    circuit = AtomicCircuit.model_validate_json(f.read())
-
-print(circuit)
-
-# %%
-from minio import Minio
-import os
-
-os.getenv("127.0.0.1:9000")
-
-client = Minio(
-    "127.0.0.1:9000",
-    access_key="admin",
-    secret_key="password",
-    secure=False
-)
-
-# %%
-source_file = "./tests/atomic.json"
-bucket_name = "oqd-cloud-bucket"
-destination_file = "my-test-file.txt"
-
-client.fput_object(
-    bucket_name, destination_file, source_file,
-)
-# %%

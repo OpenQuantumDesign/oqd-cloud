@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Literal, Sequence, Optional
+from typing import Literal, Sequence, Optional, Annotated
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Body
 from fastapi import status as http_status
-import logging
-logger = logging.getLogger('uvicorn.error')
+
 ########################################################################################
 import oqd_analog_emulator #.qutip_backend import QutipBackend
 import oqd_trical
@@ -56,22 +55,14 @@ async def available_backends():
     
 @job_router.post("/submit/{backend}", tags=["Job"])
 async def submit_job(
-    task: Task,
     backend: Literal[tuple(backends.available)],
-    # tags: Optional[Sequence[str]],
+    task: Task,
+    tags: Annotated[str, Body()],
     user: user_dependency,
     db: db_dependency,
 ):
-    print(task)
     print(f"Queueing {task} on server {backend} backend. {len(queue)} jobs in queue.")
-    # logger.debug(f'debug message {tags}')
-    
-    _backends = {
-        "oqd-analog-emulator-qutip": oqd_analog_emulator.qutip_backend.QutipBackend(),
-        "oqd-trical-qutip": oqd_trical.backend.qutip.QutipBackend(),
-        "oqd-trical-dynamiqs": oqd_trical.backend.dynamiqs.DynamiqsBackend(),
-    }
-    
+
     job = queue.enqueue(
         _backends[backend].run,
         task,
@@ -86,7 +77,7 @@ async def submit_job(
         backend=backend,
         status=job.get_status(),
         result=None,
-        # tags=tags,
+        tags=tags,
         user_id=user.user_id,
     )
     db.add(job_in_db)
