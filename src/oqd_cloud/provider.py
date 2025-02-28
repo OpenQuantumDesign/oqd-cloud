@@ -28,7 +28,7 @@ class Provider:
 
         # get available backends
         self.backends = Backends(available=[])
-        response = requests.post(
+        response = requests.get(
             self.url + "/available_backends"
         )
         backends = Backends.model_validate(response.json())

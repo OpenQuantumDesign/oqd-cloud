@@ -12,11 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Literal
+from typing import Literal, Sequence, Optional
 
 from fastapi import APIRouter, HTTPException
 from fastapi import status as http_status
-
+import logging
+logger = logging.getLogger('uvicorn.error')
 ########################################################################################
 import oqd_analog_emulator #.qutip_backend import QutipBackend
 import oqd_trical
@@ -38,7 +39,6 @@ from oqd_cloud.server.route.auth import user_dependency
 
 ########################################################################################
 
-# _backends = ["oqd-analog-emulator-qutip", "oqd-trical-qutip", "oqd-trical-dynamiqs"]
 _backends = {
     "oqd-analog-emulator-qutip": oqd_analog_emulator.qutip_backend.QutipBackend(),
     "oqd-trical-qutip": oqd_trical.backend.qutip.QutipBackend(),
@@ -48,7 +48,8 @@ backends = Backends(available=list(_backends.keys()))
 
 job_router = APIRouter(tags=["Job"])
 
-@job_router.post("/available_backends", tags=["Job"])
+
+@job_router.get("/available_backends")
 async def available_backends():
     return backends
     
@@ -56,20 +57,21 @@ async def available_backends():
 @job_router.post("/submit/{backend}", tags=["Job"])
 async def submit_job(
     task: Task,
-    # backend: Literal["oqd-analog-emulator-qutip", "oqd-trical-qutip", "oqd-trical-dynamiqs"],
     backend: Literal[tuple(backends.available)],
+    # tags: Optional[Sequence[str]],
     user: user_dependency,
     db: db_dependency,
 ):
     print(task)
     print(f"Queueing {task} on server {backend} backend. {len(queue)} jobs in queue.")
-
-    # backends = {
-    #     "oqd-analog-emulator-qutip": oqd_analog_emulator.qutip_backend.QutipBackend(),
-    #     "oqd-trical-qutip": oqd_trical.backend.qutip.QutipBackend(),
-    #     "oqd-trical-dynamiqs": oqd_trical.backend.dynamiqs.DynamiqsBackend(),
-    # }
-
+    # logger.debug(f'debug message {tags}')
+    
+    _backends = {
+        "oqd-analog-emulator-qutip": oqd_analog_emulator.qutip_backend.QutipBackend(),
+        "oqd-trical-qutip": oqd_trical.backend.qutip.QutipBackend(),
+        "oqd-trical-dynamiqs": oqd_trical.backend.dynamiqs.DynamiqsBackend(),
+    }
+    
     job = queue.enqueue(
         _backends[backend].run,
         task,
@@ -84,6 +86,7 @@ async def submit_job(
         backend=backend,
         status=job.get_status(),
         result=None,
+        # tags=tags,
         user_id=user.user_id,
     )
     db.add(job_in_db)

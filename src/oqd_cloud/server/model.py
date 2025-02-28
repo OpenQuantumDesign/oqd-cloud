@@ -44,7 +44,8 @@ class Job(BaseModel):
     status: str
     result: Optional[str] = None
     user_id: str
-
+    # tags: Optional[Sequence[str]]
+    
 
 class Backends(BaseModel):
     available: Sequence[str]

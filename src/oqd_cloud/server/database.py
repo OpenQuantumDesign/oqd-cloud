@@ -65,6 +65,7 @@ class JobInDB(Base):
     backend: Mapped[str]
     status: Mapped[str]
     result: Mapped[Optional[str]]
+    tags: Mapped[Optional[str]]
     user_id: Mapped[int] = mapped_column(ForeignKey("users.user_id"))
     user: Mapped["UserInDB"] = relationship(back_populates="jobs")
 

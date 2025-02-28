@@ -16,6 +16,7 @@
 from typing import Literal, Optional, Sequence
 
 import requests
+import json
 from oqd_core.backend.task import Task
 from pydantic import BaseModel, ConfigDict
 
@@ -41,6 +42,7 @@ class Job(BaseModel):
     status: str
     result: Optional[str] = None
     user_id: str
+    # tags: Optional[Sequence[str]]
 
 
 class Client:
@@ -136,12 +138,14 @@ class Client:
     def submit_job(
         self, 
         task: Task, 
-        backend: str
+        backend: str,
+        tags: Sequence[str]
     ):
         """Submit a Task as an AnalogCircuit, DigitalCircuit, or AtomicCircuit to a backend."""
         response = requests.post(
             self.provider.job_submission_url(backend=backend),
             json=task.model_dump(),
+            # json={"task": task.model_dump(), "tags": tags},
             headers=self.authorization_header,
         )
         print(response)
