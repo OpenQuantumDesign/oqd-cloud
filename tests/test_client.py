@@ -83,4 +83,7 @@ job = client.submit_job(task=task, backend="oqd-analog-emulator-qutip", tags='a'
 pprint(job)
 
 # %%
-client.retrieve_job(job_id=job.job_id)
+job = client.retrieve_job(job_id=job.job_id)
+pprint(job)
+
+# %%

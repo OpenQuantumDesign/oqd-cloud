@@ -39,7 +39,6 @@ queue = Queue(connection=redis_client)
 
 async def _report_success(job, connection, result, *args, **kwargs):
     async with asynccontextmanager(get_db)() as db:
-        
         save_obj(job, result)
         url = get_temp_link(job)
         status_update = dict(status="finished", result=url)  

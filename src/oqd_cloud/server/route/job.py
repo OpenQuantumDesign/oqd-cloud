@@ -61,7 +61,8 @@ async def submit_job(
     user: user_dependency,
     db: db_dependency,
 ):
-    print(f"Queueing {task} on server {backend} backend. {len(queue)} jobs in queue.")
+    print(f"Queueing task on server {backend} backend. {len(queue)} jobs in queue.")
+    # print(f"Queueing {task} on server {backend} backend. {len(queue)} jobs in queue.")
 
     job = queue.enqueue(
         _backends[backend].run,

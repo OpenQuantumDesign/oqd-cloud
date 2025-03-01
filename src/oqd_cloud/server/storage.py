@@ -23,7 +23,7 @@ from oqd_cloud.server.database import JobInDB, get_db
 ########################################################################################
 
 minio_client = Minio(
-    f"{os.getenv("MINIO_ENDPOINT")}:9000",
+    f"localhost:9000",
     access_key=os.getenv("MINIO_ROOT_USER"),
     secret_key=os.getenv("MINIO_ROOT_PASSWORD"),
     secure=False
@@ -31,6 +31,14 @@ minio_client = Minio(
 
 DEFAULT_MINIO_BUCKET = os.getenv("MINIO_DEFAULT_BUCKETS")
 RESULT_FILENAME = "result.json"
+
+if not minio_client.bucket_exists(DEFAULT_MINIO_BUCKET):
+    minio_client.make_bucket(DEFAULT_MINIO_BUCKET)
+    print("Created bucket", DEFAULT_MINIO_BUCKET)
+else:
+    print("Bucket", DEFAULT_MINIO_BUCKET, "already exists")
+
+
 
 def save_obj(job: JobInDB, result):
     # if the file is already saved, fput can be used

@@ -14,6 +14,7 @@
 
 
 from typing import Literal, Optional, Sequence
+import urllib.request
 
 import requests
 import json
@@ -167,6 +168,10 @@ class Client:
         job = Job.model_validate(response.json())
 
         if response.status_code == 200:
+            # download result file from temporary link
+            with urllib.request.urlopen(job.result) as f:
+                job.result = f.read().decode('utf-8')
+            
             self._jobs[job_id] = job
             return self.jobs[job_id]
 
