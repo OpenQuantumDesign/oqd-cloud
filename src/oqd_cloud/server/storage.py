@@ -15,36 +15,48 @@
 from typing import Literal
 from minio import Minio
 import os
+import io
+from datetime import timedelta
 
-from fastapi import APIRouter, HTTPException
-from fastapi import status as http_status
-
-########################################################################################
-import oqd_analog_emulator #.qutip_backend import QutipBackend
-import oqd_trical
-from oqd_core.backend.task import Task
-from rq.job import Callback
-from rq.job import Job as RQJob
-from sqlalchemy import select
-
-from oqd_cloud.server.database import JobInDB, db_dependency
-from oqd_cloud.server.model import Job, Backends
-from oqd_cloud.server.route.auth import user_dependency
+from oqd_cloud.server.database import JobInDB, get_db
 
 ########################################################################################
 
 minio_client = Minio(
-    "127.0.0.1:9000",
-    access_key="admin",
-    secret_key="password",
+    f"{os.getenv("MINIO_ENDPOINT")}:9000",
+    access_key=os.getenv("MINIO_ROOT_USER"),
+    secret_key=os.getenv("MINIO_ROOT_PASSWORD"),
     secure=False
 )
 
-# %%
-source_file = "./tests/atomic.json"
-bucket_name = "oqd-cloud-bucket"
-destination_file = "my-test-file.txt"
+DEFAULT_MINIO_BUCKET = os.getenv("MINIO_DEFAULT_BUCKETS")
+RESULT_FILENAME = "result.json"
 
-minio_client.fput_object(
-    bucket_name, destination_file, source_file,
-)
+def save_obj(job: JobInDB, result):
+    # if the file is already saved, fput can be used
+    # minio_client.fput_object(
+    #     BUCKET, destination_file, source_file,
+    # )
+    
+    # here we dump to json, todo: future version should dump to HDF5 
+    json_bytes = result.model_dump_json().encode('utf-8')
+    buffer = io.BytesIO(json_bytes)
+
+    minio_client.put_object(
+        DEFAULT_MINIO_BUCKET, 
+        f"{job.id}/{RESULT_FILENAME}",  
+        data=buffer, 
+        length=len(json_bytes), 
+        content_type='application/json'
+    )
+
+    return
+
+
+def get_temp_link(job: JobInDB):
+    return minio_client.get_presigned_url(
+        "GET",
+        DEFAULT_MINIO_BUCKET,
+        f"{job.id}/{RESULT_FILENAME}",
+        expires=timedelta(hours=2),
+    )
