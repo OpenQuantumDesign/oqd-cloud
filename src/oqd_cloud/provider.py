@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import requests 
+import requests
 from oqd_cloud.server.model import Backends
 
 
@@ -28,9 +28,7 @@ class Provider:
 
         # get available backends
         self.backends = Backends(available=[])
-        response = requests.get(
-            self.url + "/available_backends"
-        )
+        response = requests.get(self.url + "/available_backends")
         backends = Backends.model_validate(response.json())
         if response.status_code == 200:
             self.backends = backends
@@ -38,7 +36,7 @@ class Provider:
     @property
     def available_backends(self):
         return self.backends.available
-    
+
     @property
     def registration_url(self):
         return self.url + "/auth/register"

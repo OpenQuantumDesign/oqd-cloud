@@ -12,21 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Literal
 from minio import Minio
 import os
 import io
 from datetime import timedelta
 
-from oqd_cloud.server.database import JobInDB, get_db
+from oqd_cloud.server.database import JobInDB
 
 ########################################################################################
 
 minio_client = Minio(
-    f"localhost:9000",
+    "localhost:9000",
     access_key=os.getenv("MINIO_ROOT_USER"),
     secret_key=os.getenv("MINIO_ROOT_PASSWORD"),
-    secure=False
+    secure=False,
 )
 
 DEFAULT_MINIO_BUCKET = os.getenv("MINIO_DEFAULT_BUCKETS")
@@ -39,23 +38,22 @@ else:
     print("Bucket", DEFAULT_MINIO_BUCKET, "already exists")
 
 
-
 def save_obj(job: JobInDB, result):
     # if the file is already saved, fput can be used
     # minio_client.fput_object(
     #     BUCKET, destination_file, source_file,
     # )
-    
-    # here we dump to json, todo: future version should dump to HDF5 
-    json_bytes = result.model_dump_json().encode('utf-8')
+
+    # here we dump to json, todo: future version should dump to HDF5
+    json_bytes = result.model_dump_json().encode("utf-8")
     buffer = io.BytesIO(json_bytes)
 
     minio_client.put_object(
-        DEFAULT_MINIO_BUCKET, 
-        f"{job.id}/{RESULT_FILENAME}",  
-        data=buffer, 
-        length=len(json_bytes), 
-        content_type='application/json'
+        DEFAULT_MINIO_BUCKET,
+        f"{job.id}/{RESULT_FILENAME}",
+        data=buffer,
+        length=len(json_bytes),
+        content_type="application/json",
     )
 
     return

@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Literal, Sequence, Optional, Annotated
+from typing import Literal, Annotated
 
 from fastapi import APIRouter, HTTPException, Body
 from fastapi import status as http_status
 
 ########################################################################################
-import oqd_analog_emulator #.qutip_backend import QutipBackend
+import oqd_analog_emulator  # .qutip_backend import QutipBackend
 import oqd_trical
 from oqd_core.backend.task import Task
 from rq.job import Callback
@@ -51,8 +51,8 @@ job_router = APIRouter(tags=["Job"])
 @job_router.get("/available_backends")
 async def available_backends():
     return backends
-    
-    
+
+
 @job_router.post("/submit/{backend}", tags=["Job"])
 async def submit_job(
     backend: Literal[tuple(backends.available)],
