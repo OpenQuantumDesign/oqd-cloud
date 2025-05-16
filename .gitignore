@@ -167,3 +167,5 @@ cython_debug/
 
 uv.lock
 docker/.env copy
+
+*.DS_Store
