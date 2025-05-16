@@ -13,10 +13,10 @@
 # limitations under the License.
 
 
-from typing import Literal, Optional, Sequence
+from typing import Optional, Sequence
+import urllib.request
 
 import requests
-import json
 from oqd_core.backend.task import Task
 from pydantic import BaseModel, ConfigDict
 
@@ -135,12 +135,7 @@ class Client:
     #     self.connect(self, self.provider)
     #     pass
 
-    def submit_job(
-        self, 
-        task: Task, 
-        backend: str,
-        tags: str
-    ):
+    def submit_job(self, task: Task, backend: str, tags: str):
         """Submit a Task as an AnalogCircuit, DigitalCircuit, or AtomicCircuit to a backend."""
         response = requests.post(
             self.provider.job_submission_url(backend=backend),
@@ -167,6 +162,10 @@ class Client:
         job = Job.model_validate(response.json())
 
         if response.status_code == 200:
+            # download result file from temporary link
+            with urllib.request.urlopen(job.result) as f:
+                job.result = f.read().decode("utf-8")
+
             self._jobs[job_id] = job
             return self.jobs[job_id]
 

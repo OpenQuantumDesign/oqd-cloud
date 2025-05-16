@@ -23,11 +23,10 @@ from oqd_core.backend.task import Task, TaskArgsAnalog
 from oqd_core.interface.analog.operation import AnalogCircuit, AnalogGate
 from oqd_core.interface.analog.operator import PauliX, PauliZ
 
-from oqd_core.interface.atomic.circuit import AtomicCircuit
 
 from oqd_cloud.client import Client
 from oqd_cloud.provider import Provider
-from rich.pretty import pprint 
+from rich.pretty import pprint
 
 X = PauliX()
 Z = PauliZ()
@@ -67,20 +66,23 @@ task = Task(program=circuit, args=args)
 task.model_dump_json()
 
 
-#%%
+# %%
 client = Client()
 provider = Provider(port=8007)
 client.connect(provider=provider, username="ben", password="pwd")
 client.status_report
 
-#%%
+# %%
 backends = provider.available_backends
 print(backends)
 
 # %%
 print(client.jobs)
-job = client.submit_job(task=task, backend="oqd-analog-emulator-qutip", tags='a')
+job = client.submit_job(task=task, backend="oqd-analog-emulator-qutip", tags="a")
 pprint(job)
 
 # %%
-client.retrieve_job(job_id=job.job_id)
+job = client.retrieve_job(job_id=job.job_id)
+pprint(job)
+
+# %%
