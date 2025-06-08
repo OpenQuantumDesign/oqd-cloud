@@ -166,3 +166,6 @@ cython_debug/
 .github/workflows/_*.yml
 
 uv.lock
+docker/.env copy
+
+*.DS_Store

@@ -23,6 +23,7 @@ from sqlalchemy import select
 ########################################################################################
 from oqd_cloud.server.database import JobInDB, get_db
 
+from oqd_cloud.server.storage import save_obj, get_temp_link
 ########################################################################################
 
 REDIS_HOST = os.environ["REDIS_HOST"]
@@ -38,7 +39,10 @@ queue = Queue(connection=redis_client)
 
 async def _report_success(job, connection, result, *args, **kwargs):
     async with asynccontextmanager(get_db)() as db:
-        status_update = dict(status="finished", result=result.model_dump_json())
+        save_obj(job, result)
+        url = get_temp_link(job)
+        status_update = dict(status="finished", result=url)
+        # status_update = dict(status="finished", result=result.model_dump_json())
         query = await db.execute(select(JobInDB).filter(JobInDB.job_id == job.id))
         job_in_db = query.scalars().first()
         for k, v in status_update.items():

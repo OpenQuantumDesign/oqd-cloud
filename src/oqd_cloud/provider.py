@@ -12,25 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import requests
+from oqd_cloud.server.model import Backends
+
 
 class Provider:
-    def __init__(self, url: str = "http://localhost:8000"):
+    def __init__(self, host: str = "http://localhost", port: int = 8000):
         """
 
         Args:
             url: URL for the server
         """
+        url = f"{host}:{port}"
         self.url = url
+
+        # get available backends
+        self.backends = Backends(available=[])
+        response = requests.get(self.url + "/available_backends")
+        backends = Backends.model_validate(response.json())
+        if response.status_code == 200:
+            self.backends = backends
 
     @property
     def available_backends(self):
-        # todo: get available backends from url
-        if hasattr(self, "_available_backends"):
-            return self._available_backends
-        else:
-            return [
-                "analog-qutip",
-            ]
+        return self.backends.available
 
     @property
     def registration_url(self):

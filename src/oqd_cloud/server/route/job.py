@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Literal
+from typing import Literal, Annotated
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Body
 from fastapi import status as http_status
 
 ########################################################################################
-from oqd_analog_emulator.qutip_backend import QutipBackend
+import oqd_analog_emulator  # .qutip_backend import QutipBackend
+import oqd_trical
 from oqd_core.backend.task import Task
 from rq.job import Callback
 from rq.job import Job as RQJob
@@ -32,40 +33,39 @@ from oqd_cloud.server.jobqueue import (
     report_stopped,
     report_success,
 )
-from oqd_cloud.server.model import Job
+from oqd_cloud.server.model import Job, Backends
 from oqd_cloud.server.route.auth import user_dependency
 
 ########################################################################################
 
+_backends = {
+    "oqd-analog-emulator-qutip": oqd_analog_emulator.qutip_backend.QutipBackend(),
+    "oqd-trical-qutip": oqd_trical.backend.qutip.QutipBackend(),
+    "oqd-trical-dynamiqs": oqd_trical.backend.dynamiqs.DynamiqsBackend(),
+}
+backends = Backends(available=list(_backends.keys()))
+
 job_router = APIRouter(tags=["Job"])
+
+
+@job_router.get("/available_backends")
+async def available_backends():
+    return backends
 
 
 @job_router.post("/submit/{backend}", tags=["Job"])
 async def submit_job(
+    backend: Literal[tuple(backends.available)],
     task: Task,
-    backend: Literal["analog-qutip",],
+    tags: Annotated[str, Body()],
     user: user_dependency,
     db: db_dependency,
 ):
-    print(task)
-    print(f"Queueing {task} on server {backend} backend. {len(queue)} jobs in queue.")
-
-    backends = {
-        "analog-qutip": QutipBackend(),
-        # "tensorcircuit": TensorCircuitBackend()
-    }
-    # backends_run = {
-    #     "analog-qutip": lambda task: backends["analog-qutip"].run(task=task)
-    # }
-
-    if backend == "analog-qutip":
-        try:
-            expt, args = backends[backend].compile(task=task)
-        except Exception:
-            raise Exception("Cannot properly compile to the QutipBackend.")
+    print(f"Queueing task on server {backend} backend. {len(queue)} jobs in queue.")
+    # print(f"Queueing {task} on server {backend} backend. {len(queue)} jobs in queue.")
 
     job = queue.enqueue(
-        backends[backend].run,
+        _backends[backend].run,
         task,
         on_success=Callback(report_success),
         on_failure=Callback(report_failure),
@@ -78,6 +78,7 @@ async def submit_job(
         backend=backend,
         status=job.get_status(),
         result=None,
+        tags=tags,
         user_id=user.user_id,
     )
     db.add(job_in_db)

@@ -13,7 +13,8 @@
 # limitations under the License.
 
 
-from typing import Literal, Optional
+from typing import Optional, Sequence
+import urllib.request
 
 import requests
 from oqd_core.backend.task import Task
@@ -21,7 +22,11 @@ from pydantic import BaseModel, ConfigDict
 
 from oqd_cloud.provider import Provider
 
-__all__ = ["Job", "Client"]
+__all__ = ["Job", "Client", "Backends"]
+
+
+class Backends(BaseModel):
+    available: Sequence[str]
 
 
 class Job(BaseModel):
@@ -37,6 +42,7 @@ class Job(BaseModel):
     status: str
     result: Optional[str] = None
     user_id: str
+    tags: Optional[str] = None
 
 
 class Client:
@@ -52,7 +58,7 @@ class Client:
             user="user",
             password="password"
         )
-        job = client.submit_job(task=task, backend="analog-qutip")
+        job = client.submit_job(task=task, backend="oqd-analog-emulator")
 
         ```
     """
@@ -129,13 +135,15 @@ class Client:
     #     self.connect(self, self.provider)
     #     pass
 
-    def submit_job(self, task: Task, backend: Literal["analog-qutip",]):
+    def submit_job(self, task: Task, backend: str, tags: str):
         """Submit a Task as an AnalogCircuit, DigitalCircuit, or AtomicCircuit to a backend."""
         response = requests.post(
             self.provider.job_submission_url(backend=backend),
-            json=task.model_dump(),
+            # json=task.model_dump(),
+            json={"task": task.model_dump(), "tags": tags},
             headers=self.authorization_header,
         )
+        print(response)
         job = Job.model_validate(response.json())
 
         if response.status_code == 200:
@@ -154,6 +162,10 @@ class Client:
         job = Job.model_validate(response.json())
 
         if response.status_code == 200:
+            # download result file from temporary link
+            with urllib.request.urlopen(job.result) as f:
+                job.result = f.read().decode("utf-8")
+
             self._jobs[job_id] = job
             return self.jobs[job_id]
 
